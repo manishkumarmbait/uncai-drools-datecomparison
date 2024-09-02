@@ -1,0 +1,32 @@
+package com.uncia.uncaidroolsdatecomparison.model
+import com.uncia.uncaidroolsdatecomparison.model.DateComparison;
+global com.uncia.uncaidroolsdatecomparison.model.Response response;
+import java.util.Date;
+
+dialect "mvel"
+//dialect "java"
+
+rule "Expired Date"
+when
+       $c: DateComparison($inputDate : inputDate, $inputDate.before(new Date()))
+then
+    System.out.println("Date :" +$inputDate+" is past date.");
+    response.setMessage("Date :" +$inputDate+" is past date.");
+end
+
+rule "Upcoming Date"
+when
+       $c: DateComparison($inputDate : inputDate, $inputDate.after(new Date()))
+then
+    System.out.println("Date :" +$inputDate+" is future date.");
+    response.setMessage("Date :" +$inputDate+" is future date.");
+end
+
+rule "Event Happening"
+when
+      //$c: DateComparison($inputDate : inputDate, $inputDate.after(new Date()) || $inputDate.equals(new Date()))
+       $c: DateComparison($inputDate : inputDate, $inputDate.equals(new Date()))
+then
+    System.out.println("Date :" +$inputDate+" is todays date.");
+    response.setMessage("Date :" +$inputDate+" is todays date.");
+end
